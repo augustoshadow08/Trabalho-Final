@@ -1,0 +1,113 @@
+/* Estilos Gerais */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+}
+
+button {
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+/* Estilos para o formulário */
+.form-container {
+    display: none;
+    margin-top: 20px;
+    background-color: #e9f7e7;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+#dog-form label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+#dog-form input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#dog-form button {
+    margin-right: 10px;
+}
+
+#dog-form button[type="submit"] {
+    background-color: #007bff;
+}
+
+#dog-form button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+#dog-form button[type="button"] {
+    background-color: #dc3545;
+}
+
+#dog-form button[type="button"]:hover {
+    background-color: #c82333;
+}
+
+/* Tabela */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #007bff;
+    color: white;
+}
+
+td img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    table {
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+}
