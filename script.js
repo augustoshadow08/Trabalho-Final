@@ -1,5 +1,5 @@
 // URL da API para carregar os dados
-const apiUrl = 'https://run.mocky.io/v3/dd58cf5e-0ac0-43a0-96e5-f5573e55d5eb';
+const apiUrl = 'https://run.mocky.io/v3/404a6d49-8763-45d3-9ff0-990f51fb2eed';
 
 // Seleciona elementos do DOM
 const dogTableBody = document.getElementById('dog-list'); // Seleciona o corpo da tabela
@@ -22,7 +22,6 @@ async function loadDogs() {
         dogs.forEach(dog => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                 
                 <td><img src="${dog.imagem}" alt="${dog.cachorro}"></td>
                 <td>${dog.cachorro}</td>
                 <td>${dog.dono}</td>
@@ -57,7 +56,6 @@ dogForm.addEventListener('submit', async (e) => {
     e.preventDefault();  // Evita o envio do formulário
 
     const newDog = {
-        id: dogs.length ? dogs[dogs.length - 1].id + 1 : 1,
         cachorro: document.getElementById('dog-name').value,
         dono: document.getElementById('owner-name').value,
         telefone: document.getElementById('dog-phone').value,
