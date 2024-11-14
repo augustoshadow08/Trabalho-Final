@@ -1,60 +1,65 @@
-// URL da API para carregar os dados
-const apiUrl = 'https://run.mocky.io/v3/404a6d49-8763-45d3-9ff0-990f51fb2eed';
+// Array local de cachorros
+let dogs = [];
 
 // Seleciona elementos do DOM
-const dogTableBody = document.getElementById('dog-list'); // Seleciona o corpo da tabela
-const addDogBtn = document.getElementById('add-dog-btn'); // Seleciona o botão para adicionar cachorro
-const addDogForm = document.getElementById('add-dog-form'); // Seleciona o formulário para adicionar cachorro
-const dogForm = document.getElementById('dog-form'); // Seleciona o formulário de cadastro
-const cancelAddDogBtn = document.getElementById('cancel-add-dog'); // Seleciona o botão para cancelar adição
+const dogTableBody = document.getElementById('dog-list');
+const addDogBtn = document.getElementById('add-dog-btn');
+const addDogForm = document.getElementById('add-dog-form');
+const dogForm = document.getElementById('dog-form');
+const cancelAddDogBtn = document.getElementById('cancel-add-dog');
 
-// Função para carregar os dados da API
-async function loadDogs() {
+// URL da API para carregar os dados
+const apiUrl = 'https://run.mocky.io/v3/dd58cf5e-0ac0-43a0-96e5-f5573e55d5eb';
+
+// Função para carregar os dados da API e popular o array
+async function loadDogsFromApi() {
     try {
-        // Faz uma requisição assíncrona para a API
         const response = await fetch(apiUrl);
-        const dogs = await response.json();
-        
-        // Limpa o corpo da tabela antes de carregar os novos dados
-        dogTableBody.innerHTML = '';
-
-        // Itera sobre cada cachorro e cria uma nova linha na tabela
-        dogs.forEach(dog => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td><img src="${dog.imagem}" alt="${dog.cachorro}"></td>
-                <td>${dog.cachorro}</td>
-                <td>${dog.dono}</td>
-                <td>${dog.telefone}</td>
-                <td>${dog.email}</td>
-                <td>
-                    <button onclick="editDog('${dog.cachorro}')">Editar</button>
-                    <button onclick="deleteDog('${dog.cachorro}')">Excluir</button>
-                </td>
-            `;
-            dogTableBody.appendChild(row);
-        });
+        dogs = await response.json(); // Atualiza o array local com os dados da API
+        renderDogTable(); // Atualiza a tabela com os dados
     } catch (error) {
-        console.error('Erro ao carregar os dados:', error);
+        console.error('Erro ao carregar os dados da API:', error);
     }
 }
 
-// Exibir o formulário para adicionar cachorro
+// Função para renderizar a tabela
+function renderDogTable() {
+    dogTableBody.innerHTML = ''; // Limpa a tabela
+
+    dogs.forEach(dog => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><img src="${dog.imagem}" alt="${dog.cachorro}" style="width:50px;"></td>
+            <td>${dog.cachorro}</td>
+            <td>${dog.dono}</td>
+            <td>${dog.telefone}</td>
+            <td>${dog.email}</td>
+            <td>
+                <button onclick="editDog('${dog.cachorro}')">Editar</button>
+                <button onclick="deleteDog('${dog.cachorro}')">Excluir</button>
+            </td>
+        `;
+        dogTableBody.appendChild(row);
+    });
+}
+
+// Exibir o formulário para adicionar um cachorro
 addDogBtn.addEventListener('click', () => {
     addDogForm.style.display = 'block';
-    addDogBtn.style.display = 'none';  // Esconde o botão "Adicionar Cachorro"
+    addDogBtn.style.display = 'none';
 });
 
-// Cancelar o formulário de adição
+// Cancelar a adição de cachorro
 cancelAddDogBtn.addEventListener('click', () => {
     addDogForm.style.display = 'none';
-    addDogBtn.style.display = 'block';  // Exibe o botão novamente
+    addDogBtn.style.display = 'block';
+    dogForm.reset();
 });
 
 // Função para adicionar um cachorro
-dogForm.addEventListener('submit', async (e) => {
-    e.preventDefault();  // Evita o envio do formulário
-
+dogForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
     const newDog = {
         cachorro: document.getElementById('dog-name').value,
         dono: document.getElementById('owner-name').value,
@@ -63,111 +68,93 @@ dogForm.addEventListener('submit', async (e) => {
         imagem: document.getElementById('dog-photo').value
     };
 
-    // Aqui você pode adicionar o novo cachorro à lista localmente
-    const newRow = document.createElement('tr');
-    newRow.innerHTML = `
-        <td><img src="${newDog.imagem}" alt="${newDog.cachorro}"></td>
-        <td>${newDog.cachorro}</td>
-        <td>${newDog.dono}</td>
-        <td>${newDog.telefone}</td>
-        <td>${newDog.email}</td>
-        <td>
-            <button onclick="editDog(${newDog.cachorro})">Editar</button>
-            <button onclick="deleteDog(${newDog.cachorro})">Excluir</button>
-        </td>
-    `;
-
-    dogTableBody.appendChild(newRow);
+    // Adiciona o cachorro ao array local
+    dogs.push(newDog);
+    renderDogTable(); // Re-renderiza a tabela
 
     // Esconde o formulário e reseta os campos
     addDogForm.style.display = 'none';
-    addDogBtn.style.display = 'block';  // Exibe o botão novamente
+    addDogBtn.style.display = 'block';
     dogForm.reset();
 });
 
 // Função para editar um cachorro
-function editDog(dog) {
-    alert(`Editar cachorro com ID: ${dog.cachorro}`);
+function editDog(cachorro) {
+    const dog = dogs.find(d => d.cachorro === cachorro);
     
-    // Get the row containing the dog information
-    const row = dogTableBody.querySelector(`tr[data-cachorro="${dog.cachorro}"]`);
-    
-    if (row) {
-        // Create a form for editing
-        const editForm = document.createElement('form');
-        editForm.innerHTML = `
-            <input type="text" name="cachorro" value="${dog.cachorro}">
-            <input type="text" name="dono" value="${dog.dono}">
-            <input type="tel" name="telefone" value="${dog.telefone}">
-            <input type="email" name="email" value="${dog.email}">
-            <img src="${dog.imagem}" alt="${dog.cachorro}">
-        `;
-        
-        // Replace the existing row content with the edit form
-        row.innerHTML = '';
-        row.appendChild(editForm);
-        
-        // Add submit button to save changes
-        const submitBtn = document.createElement('button');
-        submitBtn.textContent = 'Salvar';
-        submitBtn.type = 'submit';
-        editForm.appendChild(submitBtn);
-        
-        // Add cancel button to revert changes
-        const cancelButton = document.createElement('button');
-        cancelButton.textContent = 'Cancelar';
-        cancelButton.onclick = function() {
-            loadDogs(); // Reload the data from the server
-        };
-        editForm.appendChild(cancelButton);
-        
-        // Add submit event listener
-        editForm.addEventListener('submit', async (e) => {
+    if (dog) {
+        // Preenche o formulário de edição com os dados do cachorro
+        document.getElementById('dog-name').value = dog.cachorro;
+        document.getElementById('owner-name').value = dog.dono;
+        document.getElementById('dog-phone').value = dog.telefone;
+        document.getElementById('dog-email').value = dog.email;
+        document.getElementById('dog-photo').value = dog.imagem;
+
+        // Esconde o botão de adicionar e exibe o botão de salvar
+        addDogForm.style.display = 'block';
+        addDogBtn.style.display = 'none';
+
+        // Modifica o evento de submit do formulário para editar
+        dogForm.onsubmit = (e) => {
             e.preventDefault();
-            const formData = new FormData(editForm);
-            await updateDog(formData);
-            loadDogs(); // Reload the data from the server
-        });
+
+            // Atualiza o cachorro no array
+            dog.cachorro = document.getElementById('dog-name').value;
+            dog.dono = document.getElementById('owner-name').value;
+            dog.telefone = document.getElementById('dog-phone').value;
+            dog.email = document.getElementById('dog-email').value;
+            dog.imagem = document.getElementById('dog-photo').value;
+
+            // Atualiza a tabela sem duplicação, encontrando e atualizando a linha específica
+            updateDogRow(dog);
+
+            // Esconde o formulário e exibe o botão de adicionar novamente
+            addDogForm.style.display = 'none';
+            addDogBtn.style.display = 'block';
+            dogForm.reset();
+
+            // Reseta o evento do formulário para a função de adicionar
+            dogForm.onsubmit = (e) => {
+                e.preventDefault();
+                addDog(); // Adiciona um cachorro
+            };
+        };
     }
 }
 
-async function updateDog(formData) {
-    try {
-        const response = await fetch(`${apiUrl}/${dog.cachorro}`, {
-            method: 'PUT',
-            body: formData,
-        });
-        if (!response.ok) throw new Error('Erro ao atualizar o cachorro');
-        return true;
-    } catch (error) {
-        console.error('Erro ao atualizar o cachorro:', error);
-        alert('Falha ao atualizar o cachorro. Por favor, tente novamente.');
-        return false;
+// Atualiza a linha específica da tabela com os dados modificados
+function updateDogRow(dog) {
+    // Encontra a linha correspondente ao cachorro que foi editado
+    const row = Array.from(dogTableBody.rows).find(r => r.cells[1].textContent === dog.cachorro);
+    
+    // Atualiza os dados da linha
+    if (row) {
+        row.innerHTML = `
+            <td><img src="${dog.imagem}" alt="${dog.cachorro}" style="width:50px;"></td>
+            <td>${dog.cachorro}</td>
+            <td>${dog.dono}</td>
+            <td>${dog.telefone}</td>
+            <td>${dog.email}</td>
+            <td>
+                <button onclick="editDog('${dog.cachorro}')">Editar</button>
+                <button onclick="deleteDog('${dog.cachorro}')">Excluir</button>
+            </td>
+        `;
     }
 }
 
-function deleteDog(dog) {
-    if (confirm(`Tem certeza que deseja excluir o cachorro ${dog.cachorro}?`)) {
-        fetch(`${apiUrl}/${dog.cachorro}`, {
-            method: 'DELETE',
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Cachorro excluído com sucesso!');
-                loadDogs(); // Reload the data from the server
-            } else {
-                throw new Error('Falha ao excluir o cachorro');
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao excluir o cachorro:', error);
-            alert('Falha ao excluir o cachorro. Por favor, tente novamente.');
-        });
+// Função para excluir um cachorro
+function deleteDog(cachorro) {
+    if (confirm(`Tem certeza que deseja excluir o cachorro ${cachorro}?`)) {
+        // Remove o cachorro do array
+        dogs = dogs.filter(dog => dog.cachorro !== cachorro);
+
+        // Atualiza a tabela
+        renderDogTable();
     }
 }
 
 // Inicializa a tabela ao carregar a página
 document.addEventListener('DOMContentLoaded', () => {
-    loadDogs();
+    loadDogsFromApi(); // Carrega os dados da API ao iniciar
 });
