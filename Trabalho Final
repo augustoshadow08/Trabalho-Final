@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Cachorros</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Cachorros</h1>
+        <button id="add-dog-btn">Adicionar Cachorro</button>
+        
+        <!-- Formulário para Adicionar Cachorro -->
+        <div id="add-dog-form" class="form-container">
+            <h2>Adicionar Cachorro</h2>
+            <form id="dog-form">
+                <label for="dog-name">Nome do Cachorro:</label>
+                <input type="text" id="dog-name" required>
+
+                <label for="owner-name">Nome do Dono:</label>
+                <input type="text" id="owner-name" required>
+
+                <label for="dog-phone">Telefone:</label>
+                <input type="tel" id="dog-phone" required>
+
+                <label for="dog-email">Email:</label>
+                <input type="email" id="dog-email" required>
+
+                <label for="dog-photo">Foto do Cachorro (URL):</label>
+                <input type="url" id="dog-photo" required>
+
+                <button type="submit">Adicionar</button>
+                <button type="button" id="cancel-add-dog">Cancelar</button>
+            </form>
+        </div>
+        
+        <!-- Tabela que irá mostrar os dados dos cachorros -->
+        <table id="dog-table">
+            <thead>
+                <tr>
+                    <th>Foto</th>
+                    <th>Nome do Cachorro</th>
+                    <th>Nome do Dono</th>
+                    <th>Telefone</th>
+                    <th>Email</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="dog-list">
+                <!-- Dados serão preenchidos via API -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
